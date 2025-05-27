@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  dashboard:
+    build:
+      context: ./src/dashboard
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+      - CHART_LAMBDA_URL=${CHART_LAMBDA_URL}
+    healthcheck:
+      test: ["CMD", "python", "/app/init_db.py"]
+      interval: 5s
+      timeout: 10s
+      retries: 4
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - power_network
+
+  frontend:
+    image: httpd:2.4
+    ports:
+      - "80:80"
+    volumes:
+      - ./src/dashboard/static:/usr/local/apache2/htdocs/
+      - ./git:/usr/local/apache2/code/.git
+      - ./apache2/apache.conf:/usr/local/apache2/conf/httpd.conf
+    links:
+      - dashboard
+    depends_on:
+      - dashboard
+    networks:
+      - power_network
+
+  mongodb:
+    image: mongo:6
+    volumes:
+      - mongodb_data:/data/db
+      - ./src/dashboard/init_db.py:/docker-entrypoint-initdb.d/init_db.py
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - power_network
+
+volumes:
+  mongodb_data:
+
+networks:
+  power_network:
+    driver: bridge

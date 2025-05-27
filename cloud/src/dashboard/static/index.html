@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>Power Consumption Dashboard</h1>
+            <div id="status"></div>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <h3>Current Power</h3>
+                <div id="current-power">Loading...</div>
+            </div>
+            <div class="metric-card">
+                <h3>Daily Total</h3>
+                <div id="daily-total">Loading...</div>
+            </div>
+            <div class="metric-card">
+                <h3>Peak Power</h3>
+                <div id="peak-power">Loading...</div>
+            </div>
+            <div class="metric-card">
+                <h3>Daily Cost</h3>
+                <div id="daily-cost">Loading...</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h2 style="margin: 0;">Power Consumption Chart</h2>
+                <button id="downloadSvg" class="download-btn">Download SVG</button>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="powerChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="/app.js"></script>
+</body>
+</html>
